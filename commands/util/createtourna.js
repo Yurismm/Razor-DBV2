@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require('discord.js');
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('tournament')
+        .setName('createtourna')
         .setDescription('Create a tournament')
         .addStringOption(option =>
             option.setName('game')
@@ -48,6 +48,7 @@ module.exports = {
         const timeStr = interaction.options.getString('time');
         const sendchannel = interaction.options.getChannel("channel");
 
+
         const dateTimeStr = `${dateStr} ${timeStr}`;
         const dateTime = new Date(dateTimeStr);
 
@@ -57,10 +58,12 @@ module.exports = {
             return;
         }
 
+        
         const tournamentEmbed = {
             color: 0x0099ff,
             title: 'Tournament Created',
-            fields: [{
+            fields: [
+                {
                     name: 'Game',
                     value: game,
                 },
@@ -84,10 +87,12 @@ module.exports = {
                     name: "Sent-Channel",
                     value: sendchannel.toString(),
                 },
+
             ],
             timestamp: new Date(),
         };
 
+  
         await interaction.reply({ embeds: [tournamentEmbed] });
     },
 };
