@@ -1,9 +1,15 @@
 const { SlashCommandBuilder } = require('discord.js');
+const { token, mgb } = require('./config.json');
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('createtourna')
         .setDescription('Create a tournament')
+        .addStringOption(option =>
+            option.setName('name')
+            .setDescription('Name of the the tournament')
+            .setRequired(true)
+        )
         .addStringOption(option =>
             option.setName('game')
             .setDescription('Name of the game for the tournament')
@@ -40,6 +46,7 @@ module.exports = {
         ),
 
     async execute(interaction) {
+        const name = interaction.options.getString('name');
         const game = interaction.options.getString('game');
         const participants = interaction.options.getInteger('participants');
         const teamamount = interaction.options.getInteger("team_amount");
