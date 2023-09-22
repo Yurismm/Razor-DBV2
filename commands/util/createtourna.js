@@ -1,5 +1,7 @@
 const { SlashCommandBuilder } = require('discord.js');
-const { token, mgb } = require('./config.json');
+const tournamentSchema = require('./tournament.js');
+
+
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -54,6 +56,30 @@ module.exports = {
         const dateStr = interaction.options.getString('date');
         const timeStr = interaction.options.getString('time');
         const sendchannel = interaction.options.getChannel("channel");
+
+        tournamentSchema.findOne({TournamentName:interaction.options.getString('name'),TournamentGame:interaction.options.getString('game'),
+        TournamentParticipants:interaction.options.getInteger('participants'),TournamentTeamAmount:interaction.options.getInteger('team_amount'),
+        TournamentPrizeAmount:interaction.options.getInteger('prize_amount'),TournamentDate:interaction.options.getString('date'),
+        TournamentTime:interaction.options.getString('time'),TournamentChannel:interaction.options.getChannel('channel')}, 
+        async(err, data)=>{
+            if(err) throw err;
+
+            if(!data){
+                tournamentSchema.create({
+                    TournamentName:interaction.options.getString('name'),
+                    TournamentGame:interaction.options.getString('game'),
+                    TournamentParticipants:interaction.options.getInteger('participants'),
+                    TournamentTeamAmount:interaction.options.getInteger('team_amount'),
+                    TournamentPrizeAmount:interaction.options.getInteger('prize_amount'),
+                    TournamentDate:interaction.options.getString('date'),
+                    TournamentTime:interaction.options.getString('time'),
+                    TournamentChannel:interaction.options.getChannel('channel')
+                })
+            }
+            if(data){
+                console.log(data)
+            }
+        })
 
 
         const dateTimeStr = `${dateStr} ${timeStr}`;

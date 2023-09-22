@@ -1,12 +1,16 @@
+require('dotenv').config();
 const { token } = require('./config.json');
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
-
+const { connect } = require('mongoose');
+const database = 'fcc-Mail'; 
 client.commands = new Collection();
 const foldersPath = path.join(__dirname, 'commands');
 const commandFolders = fs.readdirSync(foldersPath);
+
+
 
 for (const folder of commandFolders) {
     const commandsPath = path.join(foldersPath, folder);
@@ -51,3 +55,18 @@ client.once(Events.ClientReady, c => {
 
 
 client.login(token);
+
+// check connection to mongoose
+(async() =>{
+    console.log("Connecting to server")
+    console.log("Server URL: " + process.env.MONGODBU);
+    connect(process.env.MONGODBU).catch(console.error);
+    if (connect){
+        console.log("Connected to MONGODB Server")
+    }
+    else{
+        console.log("Error Connecting");
+    }
+
+})();
+
