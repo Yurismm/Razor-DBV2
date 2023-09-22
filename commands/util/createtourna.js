@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
 const tournamentSchema = require('./tournament.js');
 
 
@@ -43,11 +43,13 @@ module.exports = {
             .setRequired(true)
         )
         .addChannelOption(option =>
-            option.setName("channel")
-            .setDescription("Set the channel for the notification to be sent in")
+            option.setName('channel')
+            .setDescription('Set the channel for the notification to be sent in')
         ),
 
     async execute(interaction) {
+
+        // this is very inefficent?
         const name = interaction.options.getString('name');
         const game = interaction.options.getString('game');
         const participants = interaction.options.getInteger('participants');
@@ -55,12 +57,12 @@ module.exports = {
         const prize_amount = interaction.options.getInteger("prize_amount");
         const dateStr = interaction.options.getString('date');
         const timeStr = interaction.options.getString('time');
-        const sendchannel = interaction.options.getChannel("channel");
+        const sendchannel = interaction.options.getChannel('channel');
 
         tournamentSchema.findOne({TournamentName:interaction.options.getString('name'),TournamentGame:interaction.options.getString('game'),
         TournamentParticipants:interaction.options.getInteger('participants'),TournamentTeamAmount:interaction.options.getInteger('team_amount'),
         TournamentPrizeAmount:interaction.options.getInteger('prize_amount'),TournamentDate:interaction.options.getString('date'),
-        TournamentTime:interaction.options.getString('time'),TournamentChannel:interaction.options.getChannel('channel')}, 
+        TournamentTime:interaction.options.getString('time'),TournamentChannel:interaction.options.getChannel('channel')},
         async(err, data)=>{
             if(err) throw err;
 
@@ -94,7 +96,7 @@ module.exports = {
         
         const tournamentEmbed = {
             color: 0x0099ff,
-            title: 'Tournament Created',
+            title: '**Do you wish to publish this tournament?**',
             fields: [
                 {
                     name: 'Game',
@@ -120,12 +122,17 @@ module.exports = {
                     name: "Sent-Channel",
                     value: sendchannel.toString(),
                 },
-
             ],
+            image: {url: 'https://t1.gstatic.com/licensed-image?q=tbn:ANd9GcRM0OQsITDDUQ-PCjobiXAyUfEQn1sOAkjorPKB2miR-sYx_aCjqMSevH2Y4WjIvPoA'},
             timestamp: new Date(),
         };
 
-  
+        // just temp delete so we can keep previewing, i will get rid of it later
+        tournamentSchema.deleteMany({TournamentName:interaction.options.getString('name'),TournamentGame:interaction.options.getString('game'),
+        TournamentParticipants:interaction.options.getInteger('participants'),TournamentTeamAmount:interaction.options.getInteger('team_amount'),
+        TournamentPrizeAmount:interaction.options.getInteger('prize_amount'),TournamentDate:interaction.options.getString('date'),
+        TournamentTime:interaction.options.getString('time'),TournamentChannel:interaction.options.getChannel('channel')});
+
         await interaction.reply({ embeds: [tournamentEmbed] });
     },
 };
