@@ -1,4 +1,4 @@
-const { ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
+const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = require('discord.js');
 const tournamentSchema = require('./tournament.js');
 
 
@@ -93,7 +93,19 @@ module.exports = {
             return;
         }
 
+		const confirm = new ButtonBuilder()
+			.setCustomId('confirm')
+			.setLabel('Confirm Tournament')
+			.setStyle(ButtonStyle.Danger);
+
+		const cancel = new ButtonBuilder()
+			.setCustomId('cancel')
+			.setLabel('Cancel Tournament')
+			.setStyle(ButtonStyle.Secondary);
         
+        const row = new ActionRowBuilder()
+			.addComponents(cancel, confirm);
+
         const tournamentEmbed = {
             color: 0x0099ff,
             title: '**Do you wish to publish this tournament?**',
@@ -133,6 +145,6 @@ module.exports = {
         TournamentPrizeAmount:interaction.options.getInteger('prize_amount'),TournamentDate:interaction.options.getString('date'),
         TournamentTime:interaction.options.getString('time'),TournamentChannel:interaction.options.getChannel('channel')});
 
-        await interaction.reply({ embeds: [tournamentEmbed] });
+        await interaction.reply({ embeds: [tournamentEmbed], components: [row] } );
     },
 };
