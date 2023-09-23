@@ -58,11 +58,10 @@ module.exports = {
         const timeStr = interaction.options.getString('time');
         const sendchannel = interaction.options.getChannel('channel');
 
-        tournamentSchema.findOne({TournamentName: name,TournamentGame: game, TournamentParticipants:participants,TournamentTeamAmount:team_amount,
-        TournamentPrizeAmount:prize_amount ,TournamentDate: date, TournamentTime: time, TournamentChannel:channel},
+        tournamentSchema.findOne({TournamentName: name,TournamentGame: game, TournamentParticipants:participants,TournamentTeamAmount:teamamount,
+        TournamentPrizeAmount:prize_amount ,TournamentDate: dateStr, TournamentTime: timeStr, TournamentChannel:sendchannel},
         async(err, data)=>{
             if(err) throw err;
-
             if(!data){
                 tournamentSchema.create({
                     TournamentName:interaction.options.getString('name'),
@@ -140,9 +139,9 @@ module.exports = {
         };
 
         // just temp delete so we can keep previewing, i will get rid of it later
-        tournamentSchema.deleteMany({TournamentName: name,TournamentGame: game, TournamentParticipants:participants,TournamentTeamAmount:team_amount,
-            TournamentPrizeAmount:prize_amount ,TournamentDate: date, TournamentTime: time, TournamentChannel:channel});
-            
+        tournamentSchema.deleteMany({TournamentName: name,TournamentGame: game, TournamentParticipants:participants,TournamentTeamAmount:teamamount,
+            TournamentPrizeAmount:prize_amount ,TournamentDate: dateStr, TournamentTime: timeStr, TournamentChannel:sendchannel})
+
         await interaction.reply({ embeds: [tournamentEmbed], components: [row] } );
     },
 };

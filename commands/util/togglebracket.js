@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+/*const { SlashCommandBuilder } = require('discord.js');
 const tournamentSchema = require('./tournament')
 
 module.exports = {
@@ -21,9 +21,15 @@ module.exports = {
         const BracketSendChannel = interation.options.getChannel('Bracket_Send_Channel');
 
         tournamentSchema.findOne({ToggleBracket:ToggleBracket})
+
+        async(err,data)=>{
+            if(!data){
+                tournamentSchema.create({
+                    ToggleBracket:ToggleBracket
+                })
+            }
+        }
         
     }
 
-
-
-}
+}*/
