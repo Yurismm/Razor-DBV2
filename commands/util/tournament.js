@@ -1,5 +1,4 @@
-const { model, Schema } = require("mongoose");
-
+const { model, Schema } = require('mongoose');
 
 let tournamentSchema = new Schema({
     TournamentName: String,
@@ -8,7 +7,11 @@ let tournamentSchema = new Schema({
     TournamentTeamAmount: Number,
     TournamentPrizeAmount: Number,
     TournamentDate: String,
-    TournamentChannel: String
+    TournamentTime: String,
+    TournamentChannel: String,
+    ToggleBracket: Boolean,
+    ToggleScore: Boolean
+    // Toggle Thread?
 })
 
-module.exports = model("tournamentSchema", tournamentSchema);
+module.exports = model('tournamentSchema', tournamentSchema);

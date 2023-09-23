@@ -2,7 +2,6 @@ const { ActionRowBuilder, ButtonBuilder, ButtonStyle, SlashCommandBuilder } = re
 const tournamentSchema = require('./tournament.js');
 
 
-
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('createtourna')
@@ -59,10 +58,8 @@ module.exports = {
         const timeStr = interaction.options.getString('time');
         const sendchannel = interaction.options.getChannel('channel');
 
-        tournamentSchema.findOne({TournamentName:interaction.options.getString('name'),TournamentGame:interaction.options.getString('game'),
-        TournamentParticipants:interaction.options.getInteger('participants'),TournamentTeamAmount:interaction.options.getInteger('team_amount'),
-        TournamentPrizeAmount:interaction.options.getInteger('prize_amount'),TournamentDate:interaction.options.getString('date'),
-        TournamentTime:interaction.options.getString('time'),TournamentChannel:interaction.options.getChannel('channel')},
+        tournamentSchema.findOne({TournamentName: name,TournamentGame: game, TournamentParticipants:participants,TournamentTeamAmount:team_amount,
+        TournamentPrizeAmount:prize_amount ,TournamentDate: date, TournamentTime: time, TournamentChannel:channel},
         async(err, data)=>{
             if(err) throw err;
 
@@ -115,6 +112,9 @@ module.exports = {
                     value: game,
                 },
                 {
+                    // make this max participants so that we can see a
+                    // percentage sort of in both
+
                     name: 'Participants',
                     value: participants.toString(),
                 },
@@ -140,11 +140,9 @@ module.exports = {
         };
 
         // just temp delete so we can keep previewing, i will get rid of it later
-        tournamentSchema.deleteMany({TournamentName:interaction.options.getString('name'),TournamentGame:interaction.options.getString('game'),
-        TournamentParticipants:interaction.options.getInteger('participants'),TournamentTeamAmount:interaction.options.getInteger('team_amount'),
-        TournamentPrizeAmount:interaction.options.getInteger('prize_amount'),TournamentDate:interaction.options.getString('date'),
-        TournamentTime:interaction.options.getString('time'),TournamentChannel:interaction.options.getChannel('channel')});
-
+        tournamentSchema.deleteMany({TournamentName: name,TournamentGame: game, TournamentParticipants:participants,TournamentTeamAmount:team_amount,
+            TournamentPrizeAmount:prize_amount ,TournamentDate: date, TournamentTime: time, TournamentChannel:channel});
+            
         await interaction.reply({ embeds: [tournamentEmbed], components: [row] } );
     },
 };
