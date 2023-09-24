@@ -58,26 +58,36 @@ module.exports = {
         const timeStr = interaction.options.getString('time');
         const sendchannel = interaction.options.getChannel('channel');
 
-        tournamentSchema.findOne({TournamentName: name,TournamentGame: game, TournamentParticipants:participants,TournamentTeamAmount:teamamount,
-        TournamentPrizeAmount:prize_amount ,TournamentDate: dateStr, TournamentTime: timeStr, TournamentChannel:sendchannel},
-        async(err, data)=>{
-            if(err) throw err;
-            if(!data){
-                tournamentSchema.create({
-                    TournamentName:interaction.options.getString('name'),
-                    TournamentGame:interaction.options.getString('game'),
-                    TournamentParticipants:interaction.options.getInteger('participants'),
-                    TournamentTeamAmount:interaction.options.getInteger('team_amount'),
-                    TournamentPrizeAmount:interaction.options.getInteger('prize_amount'),
-                    TournamentDate:interaction.options.getString('date'),
-                    TournamentTime:interaction.options.getString('time'),
-                    TournamentChannel:interaction.options.getChannel('channel')
-                })
-            }
-            if(data){
-                console.log(data)
-            }
-        })
+        tournamentSchema.findOne({
+                TournamentName: name,
+                TournamentGame: game,
+                TournamentParticipants: participants,
+                TournamentTeamAmount: teamamount,
+                TournamentPrizeAmount: prize_amount,
+                TournamentDate: dateStr,
+                TournamentTime: timeStr,
+                TournamentChannel: sendchannel,
+                ToggleBracket: false
+            },
+            async(err, data) => {
+                if (err) throw err;
+                if (!data) {
+                    tournamentSchema.create({
+                        TournamentName: interaction.options.getString('name'),
+                        TournamentGame: interaction.options.getString('game'),
+                        TournamentParticipants: interaction.options.getInteger('participants'),
+                        TournamentTeamAmount: interaction.options.getInteger('team_amount'),
+                        TournamentPrizeAmount: interaction.options.getInteger('prize_amount'),
+                        TournamentDate: interaction.options.getString('date'),
+                        TournamentTime: interaction.options.getString('time'),
+                        TournamentChannel: interaction.options.getChannel('channel'),
+                        ToggleBracket: false
+                    })
+                }
+                if (data) {
+                    console.log(data)
+                }
+            })
 
 
         const dateTimeStr = `${dateStr} ${timeStr}`;
@@ -89,24 +99,23 @@ module.exports = {
             return;
         }
 
-		const confirm = new ButtonBuilder()
-			.setCustomId('confirm')
-			.setLabel('Confirm Tournament')
-			.setStyle(ButtonStyle.Danger);
+        const confirm = new ButtonBuilder()
+            .setCustomId('confirm')
+            .setLabel('Confirm Tournament')
+            .setStyle(ButtonStyle.Danger);
 
-		const cancel = new ButtonBuilder()
-			.setCustomId('cancel')
-			.setLabel('Cancel Tournament')
-			.setStyle(ButtonStyle.Secondary);
-        
+        const cancel = new ButtonBuilder()
+            .setCustomId('cancel')
+            .setLabel('Cancel Tournament')
+            .setStyle(ButtonStyle.Secondary);
+
         const row = new ActionRowBuilder()
-			.addComponents(cancel, confirm);
+            .addComponents(cancel, confirm);
 
         const tournamentEmbed = {
             color: 0x0099ff,
             title: '**Do you wish to publish this tournament?**',
-            fields: [
-                {
+            fields: [{
                     name: 'Game',
                     value: game,
                 },
@@ -134,14 +143,22 @@ module.exports = {
                     value: sendchannel.toString(),
                 },
             ],
-            image: {url: 'https://t1.gstatic.com/licensed-image?q=tbn:ANd9GcRM0OQsITDDUQ-PCjobiXAyUfEQn1sOAkjorPKB2miR-sYx_aCjqMSevH2Y4WjIvPoA'},
+            image: { url: 'https://t1.gstatic.com/licensed-image?q=tbn:ANd9GcRM0OQsITDDUQ-PCjobiXAyUfEQn1sOAkjorPKB2miR-sYx_aCjqMSevH2Y4WjIvPoA' },
             timestamp: new Date(),
         };
 
         // just temp delete so we can keep previewing, i will get rid of it later
-        tournamentSchema.deleteMany({TournamentName: name,TournamentGame: game, TournamentParticipants:participants,TournamentTeamAmount:teamamount,
-            TournamentPrizeAmount:prize_amount ,TournamentDate: dateStr, TournamentTime: timeStr, TournamentChannel:sendchannel})
+        tournamentSchema.deleteMany({
+            TournamentName: name,
+            TournamentGame: game,
+            TournamentParticipants: participants,
+            TournamentTeamAmount: teamamount,
+            TournamentPrizeAmount: prize_amount,
+            TournamentDate: dateStr,
+            TournamentTime: timeStr,
+            TournamentChannel: sendchannel
+        })
 
-        await interaction.reply({ embeds: [tournamentEmbed], components: [row] } );
+        await interaction.reply({ embeds: [tournamentEmbed], components: [row] });
     },
 };

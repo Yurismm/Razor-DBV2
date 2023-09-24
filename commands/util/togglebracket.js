@@ -1,4 +1,4 @@
-/*const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 const tournamentSchema = require('./tournament')
 
 module.exports = {
@@ -6,30 +6,35 @@ module.exports = {
         .setName('toggle-bracket')
         .setDescription('Toggle bracket system')
         .addBooleanOption(option =>
-            option.setName('ToggleBracket')
+            option.setName('toggle_bracket')
             .setDescription('Toggles the bracket system?')
-            .setRequired(true)
-        )
-        .addChannelOption(option =>
-            option.setName('Bracket_Send_Channel')
-            .setDescription('channel at which it is sent?')
-            .setRequired(true)
+            .setRequired(true),
         ),
-    
-    async execute(interaction){
+    async execute(interaction) {
         const ToggleBracket = interaction.options.getBoolean('ToggleBracket');
-        const BracketSendChannel = interation.options.getChannel('Bracket_Send_Channel');
 
-        tournamentSchema.findOne({ToggleBracket:ToggleBracket})
+        tournamentSchema.findOne({ ToggleBracket: false })
 
-        async(err,data)=>{
-            if(!data){
-                tournamentSchema.create({
-                    ToggleBracket:ToggleBracket
-                })
+        async(err, data) => {
+            if (err) throw err;
+            if (!data) {
+
+                if (interaction.options.getBoolean("team_amount") = true) {
+                    console.log("Bracket Toggled")
+                    tournamentSchema.findOneAndUpdate({
+                        ToggleBracket: true
+                    })
+                    console.log(data)
+                }
+
             }
         }
-        
-    }
 
-}*/
+        const togglebracketEmbed = {
+            color: 0x0099ff,
+            title: "**Bracket Toggled**",
+            description: "Bracket Toggled"
+        }
+        await interaction.reply({ embeds: [togglebracketEmbed] });
+    }
+}
