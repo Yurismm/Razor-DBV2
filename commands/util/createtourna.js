@@ -67,7 +67,8 @@ module.exports = {
                 TournamentDate: dateStr,
                 TournamentTime: timeStr,
                 TournamentChannel: sendchannel,
-                ToggleBracket: false
+                ToggleBracket: false,
+                ToggleScore: false
             },
             async(err, data) => {
                 if (err) throw err;
@@ -81,7 +82,8 @@ module.exports = {
                         TournamentDate: interaction.options.getString('date'),
                         TournamentTime: interaction.options.getString('time'),
                         TournamentChannel: interaction.options.getChannel('channel'),
-                        ToggleBracket: false
+                        ToggleBracket: false,
+                        ToggleScore: false
                     })
                 }
                 if (data) {
@@ -89,16 +91,14 @@ module.exports = {
                 }
             })
 
-
         const dateTimeStr = `${dateStr} ${timeStr}`;
         const dateTime = new Date(dateTimeStr);
-
 
         if (isNaN(dateTime.getTime())) {
             await interaction.reply('Invalid date or time format. Please use the format "YYYY-MM-DD" for date and "HH:mm UTC" for time.');
             return;
         }
-
+        
         const confirm = new ButtonBuilder()
             .setCustomId('confirm')
             .setLabel('Confirm Tournament')
@@ -122,7 +122,6 @@ module.exports = {
                 {
                     // make this max participants so that we can see a
                     // percentage sort of in both
-
                     name: 'Participants',
                     value: participants.toString(),
                 },
@@ -156,7 +155,9 @@ module.exports = {
             TournamentPrizeAmount: prize_amount,
             TournamentDate: dateStr,
             TournamentTime: timeStr,
-            TournamentChannel: sendchannel
+            TournamentChannel: sendchannel,
+            ToggleBracket: false,
+            ToggleScore: false
         })
 
         await interaction.reply({ embeds: [tournamentEmbed], components: [row] });
