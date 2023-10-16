@@ -1,4 +1,4 @@
-/*const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder } = require('discord.js');
 const tournamentSchema = require('./tournament.js');
 const { data } = require('./ping');
 
@@ -47,4 +47,3 @@ module.exports = {
             }
             
         }
-*/
