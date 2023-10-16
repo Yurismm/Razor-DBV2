@@ -29,7 +29,8 @@ module.exports = {
                     TournamentDate,
                     TournamentTime,
                     TournamentChannel,
-                    ToggleBracket
+                    ToggleBracket,
+                    ToggleScore,
                 },
 
                 async(err, data => {
