@@ -5,13 +5,17 @@ module.exports = {
       .setName('selectrole')
       .setDescription('Select a role by clicking a button'),
     async execute(interaction) {
-      const roles = {
+
+      /*
+          const roles = {
         'Valorant': '1172297161887731792', 
         'Osu': '1172297280624283678', 
         'Minecraft': '1172297245698302132', 
         'CS': '1172297319190892696', 
         'Musedash': '1172297585407578192', 
       };
+      
+      */
 
       const row = new ActionRowBuilder()
         .addComponents(

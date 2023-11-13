@@ -3,9 +3,22 @@ const { token } = require('./config.json');
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, Events, GatewayIntentBits, InteractionType, ButtonBuilder } = require('discord.js');
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMessageReactions] });
-const { connect } = require('mongoose');
 
+const client = new Client({
+    intents: [
+      GatewayIntentBits.Guilds,
+      GatewayIntentBits.GuildMessages,
+      GatewayIntentBits.DirectMessages,
+      GatewayIntentBits.GuildMembers,
+      GatewayIntentBits.GuildMessageReactions,
+      GatewayIntentBits.GuildMessageTyping,
+      GatewayIntentBits.DirectMessageReactions,
+      GatewayIntentBits.DirectMessageTyping,
+      GatewayIntentBits.MessageContent,
+    ],
+  });
+
+const { connect } = require('mongoose');
 client.commands = new Collection();
 const foldersPath = path.join(__dirname, 'commands');
 const commandFolders = fs.readdirSync(foldersPath);
@@ -17,6 +30,21 @@ const roleButtonMapping = {
     'CS': '1172297319190892696', 
     'Musedash': '1172297585407578192', 
 };
+
+const introductoryRoleID = "1172300265416835182"
+
+client.on("guildMemberAdd", member =>{
+
+    const memberRole = member.guild.roles.cache.get(introductoryRoleID);
+
+    if(!memberRole){
+        console.warn("Cannot find the role, does the guildID match, or is there an issue with the server?");
+        return;
+    }
+    member.roles.add(memberRole)
+    .then(()=> console.log("Assigned the role to ${members.user.tag}"))
+    .catch(console.error);
+})
 
 for (const folder of commandFolders) {
     const commandsPath = path.join(foldersPath, folder);
@@ -33,25 +61,37 @@ for (const folder of commandFolders) {
 }
 
 client.on(Events.InteractionCreate, async interaction => {
+    console.log("RoleSelection started");
+
     if (interaction.type === InteractionType.MessageComponent && interaction.componentType === ButtonBuilder.Type) {
         const roleID = roleButtonMapping[interaction.customId];
         if (!roleID) {
+            console.log(`No role found for customId: ${interaction.customId}`);
             await interaction.reply({ content: 'This button is not associated with a role.', ephemeral: true });
             return;
         }
 
         const role = interaction.guild.roles.cache.get(roleID);
-        if (role) {
-            const member = interaction.guild.members.cache.get(interaction.user.id);
-            if (member.roles.cache.has(roleID)) {
-                await interaction.reply({ content: `You already have the ${role.name} role!`, ephemeral: true });
-            } else {
-                await member.roles.add(role);
-                await interaction.reply({ content: `You have been given the ${role.name} role!`, ephemeral: true });
-            }
-        } else {
+        if (!role) {
+            console.log(`Role with ID ${roleID} not found in guild.`);
             await interaction.reply({ content: 'Role not found!', ephemeral: true });
+            return;
         }
+
+        const member = interaction.guild.members.cache.get(interaction.user.id);
+        if (member.roles.cache.has(roleID)) {
+            await interaction.reply({ content: `You already have the ${role.name} role!`, ephemeral: true });
+        } else {
+            try {
+                await member.roles.add(role);
+                console.log(`Role ${role.name} added to user ${member.user.tag}.`);
+                await interaction.reply({ content: `You have been given the ${role.name} role!`, ephemeral: true });
+            } catch (error) {
+                console.error(`Error adding role ${role.name} to user ${member.user.tag}:`, error);
+                await interaction.reply({ content: 'There was an error while assigning the role.', ephemeral: true });
+            }
+        }
+
     } else if (interaction.isChatInputCommand()) {
         const command = interaction.client.commands.get(interaction.commandName);
 
