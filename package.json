@@ -5,6 +5,7 @@
     "dotenv": "^16.3.1",
     "mongodb": "^6.1.0",
     "mongoose": "^6.0.2",
+    "node-osu": "^2.2.1",
     "validator": "^13.11.0"
   }
 }
