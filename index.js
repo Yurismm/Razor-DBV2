@@ -6,17 +6,17 @@ const { Client, Collection, Events, GatewayIntentBits, InteractionType, ButtonBu
 
 const client = new Client({
     intents: [
-      GatewayIntentBits.Guilds,
-      GatewayIntentBits.GuildMessages,
-      GatewayIntentBits.DirectMessages,
-      GatewayIntentBits.GuildMembers,
-      GatewayIntentBits.GuildMessageReactions,
-      GatewayIntentBits.GuildMessageTyping,
-      GatewayIntentBits.DirectMessageReactions,
-      GatewayIntentBits.DirectMessageTyping,
-      GatewayIntentBits.MessageContent,
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.GuildMessageTyping,
+        GatewayIntentBits.DirectMessageReactions,
+        GatewayIntentBits.DirectMessageTyping,
+        GatewayIntentBits.MessageContent,
     ],
-  });
+});
 
 const { connect } = require('mongoose');
 client.commands = new Collection();
@@ -24,26 +24,26 @@ const foldersPath = path.join(__dirname, 'commands');
 const commandFolders = fs.readdirSync(foldersPath);
 
 const roleButtonMapping = {
-    'Valorant': '1172297161887731792', 
-    'Osu': '1172297280624283678', 
-    'Minecraft': '1172297245698302132', 
-    'CS': '1172297319190892696', 
-    'Musedash': '1172297585407578192', 
+    'Valorant': '1172297161887731792',
+    'Osu': '1172297280624283678',
+    'Minecraft': '1172297245698302132',
+    'CS': '1172297319190892696',
+    'Musedash': '1172297585407578192',
 };
 
 const introductoryRoleID = "1172300265416835182"
 
-client.on("guildMemberAdd", member =>{
+client.on("guildMemberAdd", member => {
 
     const memberRole = member.guild.roles.cache.get(introductoryRoleID);
 
-    if(!memberRole){
+    if (!memberRole) {
         console.warn("Cannot find the role, does the guildID match, or is there an issue with the server?");
         return;
     }
     member.roles.add(memberRole)
-    .then(()=> console.log("Assigned the role to ${members.user.tag}"))
-    .catch(console.error);
+        .then(() => console.log("Assigned the role to ${members.user.tag}"))
+        .catch(console.error);
 })
 
 for (const folder of commandFolders) {

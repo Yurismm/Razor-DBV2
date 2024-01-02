@@ -11,7 +11,8 @@ let tournamentSchema = new Schema({
     TournamentChannel: String,
     ToggleBracket: Boolean,
     ToggleScore: Boolean,
-    Players: [Schema.Types.Mixed]
+    Players: [Schema.Types.Mixed],
+    TournamentCreated: { type: Date, default: Date.now },
     // Toggle Thread?
 })
 

@@ -18,15 +18,12 @@ module.exports = {
         async(err, data) => {
             if (err) throw err;
             if (!data) {
-
                 if (interaction.options.getBoolean("toggle_bracket") = true) {
                     console.log("Bracket Toggled")
                     tournamentSchema.findOneAndUpdate({
                         ToggleBracket: true
                     })
                     console.log(data)
-                
-                
                 }
             }
         }

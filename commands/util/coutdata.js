@@ -4,47 +4,45 @@ const { data } = require('./ping');
 
 
 module.exports = {
-        data: new SlashCommandBuilder()
-            .setName('coutdata')
-            .setDescription('personal command for debugging'),
+    data: new SlashCommandBuilder()
+        .setName('coutdata')
+        .setDescription('personal command for debugging'),
 
+    async execute(interaction) {
+        const coutdataembed = {
+            color: 0x0099ff,
+            title: '**Check command line (:**',
+            description: 'Check command line (:'
+        }
 
+        await interaction.reply({ embed: [coutdataembed] })
 
+        tournamentSchema.findOne({
+                TournamentName,
+                TournamentGame,
+                TournamentParticipants,
+                TournamentTeamAmount,
+                TournamentPrizeAmount,
+                TournamentDate,
+                TournamentTime,
+                TournamentChannel,
+                ToggleBracket,
+                ToggleScore,
+            },
 
-        async execute(interaction) {
-            const coutdataembed = {
-                color: 0x0099ff,
-                title: '**Check command line (:**',
-                description: 'Check command line (:'
-            }
+            async(err, data => {
+                    if (err) throw err;
 
-            await interaction.reply({ embed: [coutdataembed] })
-
-            tournamentSchema.findOne({
-                    TournamentName,
-                    TournamentGame,
-                    TournamentParticipants,
-                    TournamentTeamAmount,
-                    TournamentPrizeAmount,
-                    TournamentDate,
-                    TournamentTime,
-                    TournamentChannel,
-                    ToggleBracket,
-                    ToggleScore,
-                },
-
-                async(err, data => {
-                        if (err) throw err;
-
-                        if (data) {
-                            console.log(data);
-                        }
-
+                    if (data) {
+                        console.log(data);
                     }
 
+                }
 
-                )
 
-        )}
-            
-        }
+            )
+
+        )
+    }
+
+}
